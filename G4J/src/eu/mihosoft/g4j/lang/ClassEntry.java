@@ -39,4 +39,5 @@ public interface ClassEntry {
     public String getName();
     public Collection<MethodEntry> getMethods();
     public Collection<String> getTemplateArguments();
+    public Collection<ClassEntry> getClasses();
 }

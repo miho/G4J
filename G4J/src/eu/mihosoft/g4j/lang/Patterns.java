@@ -51,6 +51,15 @@ public class Patterns {
      */
     public static final String TEMPLATE_ARGUMENT_STRING =
             "<\\s*" + IDENTIFIER_LIST_STRING + "\\s*>";
+
+    /**
+     * <p>Regular expression to match block-comments.</p>
+     * <p><b>Note:</b>  does also match block-comments inside strings! Thus,
+     * to work correctly strings have to be removed before using this
+     * expression.</p>
+     */
+    public static final String BLOCK_COMMENT_STRING =
+            "/\\*(?:.|[\\n\\r])*?\\*/";
     /**
      * Pattern to match template class headers. Example:
      * <code>
@@ -58,9 +67,12 @@ public class Patterns {
      * </code>
      */
     public static final Pattern TEMPLATE_CLS_HEADER = Pattern.compile(
-            "(\\s+|^)class\\s+"
+            "(\\s+|^|(\\s+|^)public\\s+|(\\s+|^)protected\\s+|(\\s+|^)"
+            + "private\\s+)(static\\s+|abstract\\s+|final\\s+|)class\\s+"
             + IDENTIFIER_STRING
-            + "\\s*" + TEMPLATE_ARGUMENT_STRING,
+            + "\\s*" + TEMPLATE_ARGUMENT_STRING
+            + "(\\s*extends\\s+" + IDENTIFIER_STRING+")*"
+            + "(\\s+implements\\s+" + IDENTIFIER_LIST_STRING+")*",
             Pattern.MULTILINE);
     /**
      * Pattern to match template arguments, e.g.,

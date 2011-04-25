@@ -32,6 +32,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -52,7 +53,7 @@ public class Main {
             // TODO code application logic here
             BufferedReader reader = new BufferedReader(
                     new FileReader(
-                    "src/eu/mihosoft/vrl/lang/samples/Sample01.g4j"));
+                    "src/eu/mihosoft/g4j/lang/samples/Sample01.g4j"));
 
             while (reader.ready()) {
                 code+=reader.readLine()+"\n";
@@ -69,6 +70,18 @@ public class Main {
         String result = tP.process(code);
         System.out.println("Code:\n" + result+"--------------------------\n");
         System.out.println("Template Arguments: " + new TemplateArgumentsExtractor().process(code));
+
+
+        CodeAnalyzerImpl analyzer = new CodeAnalyzerImpl();
+
+        FilterComments rC = new FilterComments();
+        code = rC.process(code);
+
+        Collection<ClassEntry> classes = analyzer.analyze(new CodeEntry(code));
+
+        for (ClassEntry cE : classes) {
+            System.out.println("Class (" + cE.getName() + "): \n" + cE.getCode());
+        }
 
 
     }

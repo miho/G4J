@@ -29,6 +29,13 @@
 public class Sample01 <Type01, Type02> extends Base{
     private static class SubsubSample01 <Type, Type2> extends Base{
     }
+
+    /*private static class SubsubSample02 extends Base{
+    }*/
+
+    public static add(Type01 a1, Type02 a2) {
+      return "\"///**/";
+    }
 }
 
 private class SubSample01 <Type> extends Base{

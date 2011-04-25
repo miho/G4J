@@ -34,8 +34,8 @@ package eu.mihosoft.g4j.lang;
  */
 public class CodeEntry {
     private String code;
-    
-    public void setCode(String code) {
+
+    public CodeEntry(String code) {
         this.code = code;
     }
     
