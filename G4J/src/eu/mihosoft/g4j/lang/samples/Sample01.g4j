@@ -11,7 +11,7 @@
  *       of conditions and the following disclaimer in the documentation and/or other materials
  *       provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY <COPYRIGHT HOLDER> ``AS IS'' AND ANY EXPRESS OR IMPLIED
+ * THIS SOFTWARE IS PROVIDED BY Michael Hoffer <info@michaelhoffer.de> "AS IS" AND ANY EXPRESS OR IMPLIED
  * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> OR
  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
@@ -26,36 +26,10 @@
  * or implied, of Michael Hoffer <info@michaelhoffer.de>.
  */
 
-package eu.mihosoft.vrl.lang;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-/**
- *
- * @author Michael Hoffer <info@michaelhoffer.de>
- */
-public class TemplateArgumentExtractor implements StringProcessor{
-    private static final String id = "TemplateArgumentExtractor";
-
-    public String process(String code) {
-        String result = "";
-
-        Matcher m1 = Patterns.TEMPLATE_CLS_HEADER.matcher(code);
-
-        if (m1.find()) {
-            Matcher m2 = Patterns.TEMPLATE_ARGUMENT.matcher(m1.group());
-
-            if (m2.find()) {
-                result = m2.group().replace("<", "").replace(">", "");
-            }
-        }
-
-        return result;
+public class Sample01 <Type01, Type02> extends Base{
+    private static class SubsubSample01 <Type, Type2> extends Base{
     }
+}
 
-    public String getID() {
-        return id;
-    }
-
+private class SubSample01 <Type> extends Base{
 }

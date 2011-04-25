@@ -11,7 +11,7 @@
  *       of conditions and the following disclaimer in the documentation and/or other materials
  *       provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY <COPYRIGHT HOLDER> ``AS IS'' AND ANY EXPRESS OR IMPLIED
+ * THIS SOFTWARE IS PROVIDED BY Michael Hoffer <info@michaelhoffer.de> "AS IS" AND ANY EXPRESS OR IMPLIED
  * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> OR
  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
@@ -26,35 +26,19 @@
  * or implied, of Michael Hoffer <info@michaelhoffer.de>.
  */
 
-package eu.mihosoft.vrl.lang;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+package eu.mihosoft.g4j.lang;
 
 /**
- *
+ * 
  * @author Michael Hoffer <info@michaelhoffer.de>
  */
-public class TemplateProcessor implements StringProcessor{
+public interface StringProcessor extends IDEntry {
+    /**
+     * Processes code and returns it.
+     * @param code code to process
+     * @return processed code
+     */
+    public String process(String code);
 
-    private static final String id = "Processor:templates";
-
-    public String process(String code) {
-        String result = "";
-
-        Matcher m = Patterns.TEMPLATE_CLS_HEADER.matcher(code);
-
-        while (m.find()) {
-            System.out.println(">> substring found!");
-            
-            result += m.group()+"\n";
-        }
-
-        return result;
-    }
-
-    public String getID() {
-        return id;
-    }
-
+    public String getID();
 }

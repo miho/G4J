@@ -11,7 +11,7 @@
  *       of conditions and the following disclaimer in the documentation and/or other materials
  *       provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY <COPYRIGHT HOLDER> ``AS IS'' AND ANY EXPRESS OR IMPLIED
+ * THIS SOFTWARE IS PROVIDED BY Michael Hoffer <info@michaelhoffer.de> "AS IS" AND ANY EXPRESS OR IMPLIED
  * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> OR
  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
@@ -25,15 +25,15 @@
  * authors and should not be interpreted as representing official policies, either expressed
  * or implied, of Michael Hoffer <info@michaelhoffer.de>.
  */
+package eu.mihosoft.g4j.lang;
 
-package eu.mihosoft.vrl.lang;
+import java.util.Collection;
 
 /**
  *
  * @author Michael Hoffer <info@michaelhoffer.de>
  */
-public interface ClassEntry {
-    public String getCode();
-    public String getClassName();
-    
+public interface CodeAnalyzer extends IDEntry{
+    public String getID();
+    public Collection<ClassEntry> analyze(CodeEntry code);
 }

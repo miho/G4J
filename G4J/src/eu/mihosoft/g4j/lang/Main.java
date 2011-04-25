@@ -11,7 +11,7 @@
  *       of conditions and the following disclaimer in the documentation and/or other materials
  *       provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY <COPYRIGHT HOLDER> ``AS IS'' AND ANY EXPRESS OR IMPLIED
+ * THIS SOFTWARE IS PROVIDED BY Michael Hoffer <info@michaelhoffer.de> "AS IS" AND ANY EXPRESS OR IMPLIED
  * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> OR
  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
@@ -26,7 +26,7 @@
  * or implied, of Michael Hoffer <info@michaelhoffer.de>.
  */
 
-package eu.mihosoft.vrl.lang;
+package eu.mihosoft.g4j.lang;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -68,7 +68,7 @@ public class Main {
         TemplateProcessor tP = new TemplateProcessor();
         String result = tP.process(code);
         System.out.println("Code:\n" + result+"--------------------------\n");
-        System.out.println("Template Argument: " + new TemplateArgumentExtractor().process(code));
+        System.out.println("Template Arguments: " + new TemplateArgumentsExtractor().process(code));
 
 
     }
