@@ -68,7 +68,7 @@ public class Main {
         
         TemplateProcessor tP = new TemplateProcessor();
         String result = tP.process(code);
-        System.out.println("Code:\n" + result+"--------------------------\n");
+        System.out.println("Code:\n" + result+"\n--------------------------\n");
         System.out.println("Template Arguments: " + new TemplateArgumentsExtractor().process(code));
 
 

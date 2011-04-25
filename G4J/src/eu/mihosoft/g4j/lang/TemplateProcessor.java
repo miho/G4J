@@ -44,7 +44,7 @@ public class TemplateProcessor implements StringProcessor{
         Matcher m = Patterns.TEMPLATE_CLS_HEADER.matcher(code);
 
         while (m.find()) {
-            System.out.println(">> substring found!");
+//            System.out.println(">> substring found!");
             
             result += m.group()+"\n";
         }

@@ -42,6 +42,7 @@ public class FilterComments implements StringProcessor {
         String[] lines = code.split("\n");
 
         boolean multiLineComment = false;
+        boolean insideComment = false;
 
         for (String l : lines) {
 
@@ -76,7 +77,7 @@ public class FilterComments implements StringProcessor {
                     multiLineCommentStop = true && !doubleQuotes;
                 }
 
-                boolean insideComment = singleLineComment || multiLineComment;
+                insideComment = singleLineComment || multiLineComment;
 
                 // if we are in a single-line comment there is nothing to check,
                 // we can break
@@ -84,10 +85,17 @@ public class FilterComments implements StringProcessor {
                     break;
                 }
 
+                // if we are not inside of a comment, we write characters
                 if (!insideComment) {
+                    // we did read ahead last time to check whether we are
+                    // inside of a comment. as we were not, we wriote the
+                    // last char now.
                     if (lastChar == '/' && !multiLineCommentStop) {
                         result += lastChar;
                     }
+                    // if the current character is a '/' we do not write this
+                    // character as we do not know if this is the beginning of
+                    // a comment
                     if (ch != '/') {
                         multiLineCommentStop = false;
                         result += ch;
@@ -97,7 +105,7 @@ public class FilterComments implements StringProcessor {
                 lastChar = ch;
             }
 
-            if (!multiLineComment) {
+            if (!insideComment) {
                 result += "\n";
             }
 
