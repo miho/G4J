@@ -25,7 +25,6 @@
  * authors and should not be interpreted as representing official policies, either expressed
  * or implied, of Michael Hoffer <info@michaelhoffer.de>.
  */
-
 package eu.mihosoft.g4j.lang;
 
 import java.io.BufferedReader;
@@ -48,23 +47,35 @@ public class Main {
     public static void main(String[] args) {
 
         String code = IOUtils.readSampleCode("/eu/mihosoft/g4j/lang/samples/MathSample01.g4j");
-        code+="\n"+IOUtils.readSampleCode("/eu/mihosoft/g4j/lang/samples/Main.g4j");
-        
-       
+        code += "\n" + IOUtils.readSampleCode("/eu/mihosoft/g4j/lang/samples/Main.g4j");
+
+
         TemplateClassProcessor tP = new TemplateClassProcessor();
         String result = tP.process(code);
-      
-        
+
+
         System.out.println("Template Classes:");
-        
+
         for (TemplateClass tC : tP.getTemplateClasses()) {
             System.out.println(tC);
         }
-        
+
         System.out.println("Template Instances:");
-        
+
         for (TemplateClass tC : tP.getTemplateInstances()) {
             System.out.println(tC);
+        }
+
+        System.out.println("Implementations:");
+
+
+        for (TemplateClass tC : tP.getTemplateClasses()) {
+            
+            System.out.println("Code: " + tC);
+
+            ClassCodeExtractor cE = new ClassCodeExtractor(tC);
+            
+            System.out.println(cE.process(code));
         }
 
 
@@ -80,8 +91,7 @@ public class Main {
 //        }
 
 
-        
-        
-    }
 
+
+    }
 }

@@ -10,12 +10,12 @@ package eu.mihosoft.g4j.lang;
 public class TemplateClass {
     private String name;
     private String templateArguments;
-    private String code;
+    private String clsHeader;
 
-    public TemplateClass(String name, String templateArguments, String code) {
+    public TemplateClass(String name, String templateArguments, String clsHeader) {
         this.name = name;
         this.templateArguments = templateArguments;
-        this.code = code;
+        this.clsHeader = clsHeader;
     }
 
     /**
@@ -35,8 +35,8 @@ public class TemplateClass {
     /**
      * @return the code
      */
-    public String getCode() {
-        return code;
+    public String getClsHeader() {
+        return clsHeader;
     }
 
 
