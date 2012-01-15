@@ -49,11 +49,15 @@ public class Main {
 
         String code = IOUtils.readSampleCode("/eu/mihosoft/g4j/lang/samples/MathSample01.g4j");
         code += "\n" + IOUtils.readSampleCode("/eu/mihosoft/g4j/lang/samples/Main.g4j");
+        code += "\n" + IOUtils.readSampleCode("/eu/mihosoft/g4j/lang/samples/Base.g4j");
+        
+        ArrayList<TemplateClass> templateClasses = new ArrayList<TemplateClass>();
+        ArrayList<TemplateClass> templateInstances = new ArrayList<TemplateClass>();
 
 
-        TemplateClassProcessor tP = new TemplateClassProcessor();
+        TemplateClassProcessor tP = 
+                new TemplateClassProcessor(templateClasses, templateInstances);
         tP.process(code);
-
 
         System.out.println("Template Classes:");
 
@@ -81,6 +85,8 @@ public class Main {
 
         System.out.println("Template Instance Implementations:");
 
+        String finalCode = "// processed code\n\n";
+
 
         for (TemplateClass tC : tP.getTemplateClasses()) {
 
@@ -92,21 +98,24 @@ public class Main {
                     instances.add(t);
                 }
             }
-            
+
             ClassCodeExtractor cE = new ClassCodeExtractor(tC);
             String templateClassCode = cE.process(code);
 
             for (TemplateClass tI : instances) {
                 System.out.println("Code: " + tI);
-                
-                TemplateInstanceCodeCreator tIC = 
-                        new TemplateInstanceCodeCreator(tC,tI);
+
+                TemplateInstanceCodeCreator tIC =
+                        new TemplateInstanceCodeCreator(tC, tI,
+                        templateClasses, templateInstances);
 
                 System.out.println(tIC.process(templateClassCode));
+
+                finalCode += tIC.process(templateClassCode);
             }
-
-
         }
+
+        System.out.println("Final Code:\n\n" + finalCode);
 
 
 //        CodeAnalyzerImpl analyzer = new CodeAnalyzerImpl();

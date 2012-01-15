@@ -15,12 +15,17 @@ public class TemplateInstanceCodeCreator implements StringProcessor {
     private static final String id = "Processor:codecreator";
     private TemplateClass templateClass;
     private TemplateClass templateInstance;
+    private Collection<TemplateClass> templateClasses;
+    private Collection<TemplateClass> templateInstances;
 
-    public TemplateInstanceCodeCreator(
-            TemplateClass templateClass,
-            TemplateClass templateInstance) {
+    public TemplateInstanceCodeCreator(TemplateClass templateClass,
+            TemplateClass templateInstance,
+            Collection<TemplateClass> templateClasses,
+            Collection<TemplateClass> templateInstances) {
         this.templateClass = templateClass;
         this.templateInstance = templateInstance;
+        this.templateClasses = templateClasses;
+        this.templateInstances = templateInstances;
     }
 
     private String replaceTemplateArguments(String args) {

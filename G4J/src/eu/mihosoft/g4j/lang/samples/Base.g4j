@@ -26,15 +26,9 @@
  * or implied, of Michael Hoffer <info@michaelhoffer.de>.
  */
 
-public class MathSample01 <<T>> extends Base <<T>> {
+public class Base <<T>> {
 
-    class SubClass<<T>> {
-        public T mult(T a, T b) {
-            return a*b;
-        }
-    }
-   
-    public T add(T a, T b) {
-      return a+b;
+    public Class<?> getType() {
+        return T.class;
     }
 }
