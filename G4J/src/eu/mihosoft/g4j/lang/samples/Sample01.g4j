@@ -38,5 +38,5 @@ public class Sample01 <<Type01, Type02>> extends Base{
     }
 }
 
-private class SubSample01 <Type> extends Base{
+private class SubSample01 <<Type>> extends Base{
 }
