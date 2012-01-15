@@ -27,8 +27,14 @@
  */
 
 public class MathSample01 <<T>> {
+
+    class SubClass<<T>> {
+        public T mult(T a, T b) {
+            return a*b;
+        }
+    }
    
-    public static T add(T a, T b) {
+    public T add(T a, T b) {
       return a+b;
     }
 }
