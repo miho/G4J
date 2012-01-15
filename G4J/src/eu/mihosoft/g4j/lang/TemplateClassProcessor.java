@@ -27,15 +27,19 @@
  */
 package eu.mihosoft.g4j.lang;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.regex.Matcher;
 
 /**
  *
  * @author Michael Hoffer <info@michaelhoffer.de>
  */
-public class TemplateProcessor implements StringProcessor {
+public class TemplateClassProcessor implements StringProcessor {
 
     private static final String id = "Processor:templates";
+    
+    private Collection<TemplateClass> classes = new ArrayList<TemplateClass>();
 
     private String replaceTemplateArguments(String args) {
         String[] templateArgs = args.split(",");
@@ -54,6 +58,8 @@ public class TemplateProcessor implements StringProcessor {
 
     public String process(String code) {
         
+        classes = new ArrayList<TemplateClass>();
+        
         String originalCode = code;
 
         // filter comments, chars and strings
@@ -71,7 +77,6 @@ public class TemplateProcessor implements StringProcessor {
         while (m.find()) {
 
             String templateClsHeader = m.group();
-
             TemplateArgumentsExtractor tAE = new TemplateArgumentsExtractor();
 
             String templateArguments = tAE.process(templateClsHeader);
@@ -81,9 +86,14 @@ public class TemplateProcessor implements StringProcessor {
                     "\\s*<<\\s*" + templateArguments + "\\s*>>",
                     replaceTemplateArguments(templateArguments));
 
-            originalCode = originalCode.replaceFirst(templateClsHeader, newTemplateClsHeader);
+            originalCode = originalCode.replaceFirst(
+                    templateClsHeader, newTemplateClsHeader);
 
             result.append(templateClsHeader).append("\n");
+            
+            getClasses().add(new TemplateClass(
+                    LangUtils.classNameFromTemplateClsHeader(templateClsHeader),
+                    templateArguments, code));
         }
 
         return originalCode;
@@ -91,5 +101,12 @@ public class TemplateProcessor implements StringProcessor {
 
     public String getID() {
         return id;
+    }
+
+    /**
+     * @return the classes
+     */
+    public Collection<TemplateClass> getClasses() {
+        return classes;
     }
 }

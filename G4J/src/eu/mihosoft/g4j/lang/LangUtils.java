@@ -109,6 +109,39 @@ public class LangUtils {
 
         return result;
     }
+    
+    /**
+     * Returns the class name of the class defined in the given template class
+     * header
+     *
+     * @param clsHeader string to analyze
+     * @return class name of the class defined in the given template class
+     * header
+     */
+    public static String classNameFromTemplateClsHeader(String clsHeader) {
+        String result = "";
+
+        String[] lines = clsHeader.split("\\n");
+
+        Matcher m = Patterns.CLASS_DEFINITION.matcher(clsHeader);
+
+        for (String l : lines) {
+
+            l = l.trim();
+
+            if (m.find()) {
+
+                l = m.group();
+
+                result = l.replaceFirst(
+                        Patterns.CLASS_DEFINITION_WITHOUT_IDENTIFIER_STRING,
+                        "").split(" ")[0];
+                break;
+            }
+        }
+
+        return result;
+    }
 
     /**
      * Indicates whether in the specified code a class is defined.

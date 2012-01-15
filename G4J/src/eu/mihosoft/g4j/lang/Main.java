@@ -47,13 +47,19 @@ public class Main {
      */
     public static void main(String[] args) {
 
-        String code = IOUtils.readSampleCode("/eu/mihosoft/g4j/lang/samples/Sample01.g4j");
+        String code = IOUtils.readSampleCode("/eu/mihosoft/g4j/lang/samples/MathSample01.g4j");
+        code+="\n"+IOUtils.readSampleCode("/eu/mihosoft/g4j/lang/samples/Main.g4j");
         
        
-        TemplateProcessor tP = new TemplateProcessor();
+        TemplateClassProcessor tP = new TemplateClassProcessor();
         String result = tP.process(code);
-        System.out.println("Code:\n" + result+"\n--------------------------\n");
-//        System.out.println("Template Arguments: " + new TemplateArgumentsExtractor().process(code));
+      
+        
+        
+        
+        for (TemplateClass tC : tP.getClasses()) {
+            System.out.println(tC);
+        }
 
 
 //        CodeAnalyzerImpl analyzer = new CodeAnalyzerImpl();
@@ -68,6 +74,8 @@ public class Main {
 //        }
 
 
+        
+        
     }
 
 }
