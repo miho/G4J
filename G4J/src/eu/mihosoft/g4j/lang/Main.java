@@ -47,41 +47,25 @@ public class Main {
      */
     public static void main(String[] args) {
 
-        String code = null;
-
-        try {
-            // TODO code application logic here
-            BufferedReader reader = new BufferedReader(
-                    new FileReader(
-                    "src/eu/mihosoft/g4j/lang/samples/Sample01.g4j"));
-
-            while (reader.ready()) {
-                code+=reader.readLine()+"\n";
-            }
-
-            reader.close();
-
-        } catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            System.exit(1);
-        }
+        String code = IOUtils.readSampleCode("/eu/mihosoft/g4j/lang/samples/Sample01.g4j");
         
+       
         TemplateProcessor tP = new TemplateProcessor();
         String result = tP.process(code);
         System.out.println("Code:\n" + result+"\n--------------------------\n");
-        System.out.println("Template Arguments: " + new TemplateArgumentsExtractor().process(code));
+//        System.out.println("Template Arguments: " + new TemplateArgumentsExtractor().process(code));
 
 
-        CodeAnalyzerImpl analyzer = new CodeAnalyzerImpl();
-
-        FilterComments rC = new FilterComments();
-        code = rC.process(code);
-
-        Collection<ClassEntry> classes = analyzer.analyze(new CodeEntry(code));
-
-        for (ClassEntry cE : classes) {
-            System.out.println("Class (" + cE.getName() + "): \n" + cE.getCode());
-        }
+//        CodeAnalyzerImpl analyzer = new CodeAnalyzerImpl();
+//
+//        FilterComments rC = new FilterComments();
+//        code = rC.process(code);
+//
+//        Collection<ClassEntry> classes = analyzer.analyze(new CodeEntry(code));
+//
+//        for (ClassEntry cE : classes) {
+//            System.out.println("Class (" + cE.getName() + "): \n" + cE.getCode());
+//        }
 
 
     }

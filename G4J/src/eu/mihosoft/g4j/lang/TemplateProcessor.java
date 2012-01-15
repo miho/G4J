@@ -25,7 +25,6 @@
  * authors and should not be interpreted as representing official policies, either expressed
  * or implied, of Michael Hoffer <info@michaelhoffer.de>.
  */
-
 package eu.mihosoft.g4j.lang;
 
 import java.util.regex.Matcher;
@@ -34,26 +33,63 @@ import java.util.regex.Matcher;
  *
  * @author Michael Hoffer <info@michaelhoffer.de>
  */
-public class TemplateProcessor implements StringProcessor{
+public class TemplateProcessor implements StringProcessor {
 
     private static final String id = "Processor:templates";
 
+    private String replaceTemplateArguments(String args) {
+        String[] templateArgs = args.split(",");
+
+        StringBuilder result = new StringBuilder();
+
+        for (String arg : templateArgs) {
+
+            arg = arg.trim();
+
+            result.append("_").append(arg);
+        }
+
+        return result.toString();
+    }
+
     public String process(String code) {
-        String result = "";
+        
+        String originalCode = code;
+
+        // filter comments, chars and strings
+        FilterComments fC = new FilterComments();
+        code = fC.process(code);
+        FilterChars fCh = new FilterChars();
+        code = fCh.process(code);
+        FilterStrings fS = new FilterStrings();
+        code = fS.process(code);
+
+        StringBuilder result = new StringBuilder();
 
         Matcher m = Patterns.TEMPLATE_CLS_HEADER.matcher(code);
 
         while (m.find()) {
-//            System.out.println(">> substring found!");
-            
-            result += m.group()+"\n";
+
+            String templateClsHeader = m.group();
+
+            TemplateArgumentsExtractor tAE = new TemplateArgumentsExtractor();
+
+            String templateArguments = tAE.process(templateClsHeader);
+
+            String newTemplateClsHeader =
+                    templateClsHeader.replaceAll(
+                    "\\s*<<\\s*" + templateArguments + "\\s*>>",
+                    replaceTemplateArguments(templateArguments));
+
+            originalCode = originalCode.replaceFirst(templateClsHeader, newTemplateClsHeader);
+
+            result.append(templateClsHeader).append("\n");
         }
 
-        return result;
+        return originalCode;
     }
 
     public String getID() {
         return id;
     }
-
 }

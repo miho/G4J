@@ -26,8 +26,8 @@
  * or implied, of Michael Hoffer <info@michaelhoffer.de>.
  */
 
-public class Sample01 <Type01, Type02> extends Base{
-    private static class SubsubSample01 <Type, Type2> extends Base{
+public class Sample01 <<Type01, Type02>> extends Base{
+    private static class SubsubSample01 <<Type, Type2>> extends Base{
     }
 
     /*private static class SubsubSample02 extends Base{

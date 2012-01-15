@@ -29,7 +29,8 @@
 package eu.mihosoft.g4j.lang;
 
 /**
- * 
+ * A string processor.
+ * @see {@link FilterComments}, {@link FilterStrings}, {@link FilterChars}
  * @author Michael Hoffer <info@michaelhoffer.de>
  */
 public interface StringProcessor extends IDEntry {
@@ -40,5 +41,9 @@ public interface StringProcessor extends IDEntry {
      */
     public String process(String code);
 
+    /**
+     * Returns the id of this processor.
+     * @return the id of this processor
+     */
     public String getID();
 }

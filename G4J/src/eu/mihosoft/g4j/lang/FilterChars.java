@@ -1,3 +1,5 @@
+package eu.mihosoft.g4j.lang;
+
 /*
  * Copyright 2011 Michael Hoffer <info@michaelhoffer.de>. All rights reserved.
  *
@@ -26,35 +28,69 @@
  * or implied, of Michael Hoffer <info@michaelhoffer.de>.
  */
 
-package eu.mihosoft.g4j.lang;
-
-import java.util.regex.Matcher;
 
 /**
  *
  * @author Michael Hoffer <info@michaelhoffer.de>
  */
-public class TemplateArgumentsExtractor implements StringProcessor{
-    private static final String id = "TemplateArgumentExtractor";
+public class FilterChars implements StringProcessor {
 
+    private static final String id = "FilterChars";
+
+    @Override
     public String process(String code) {
+
         StringBuilder result = new StringBuilder();
 
-        Matcher m1 = Patterns.TEMPLATE_CLS_HEADER.matcher(code);
+        String[] lines = code.split("\n");
 
-        if (m1.find()) {
-            Matcher m2 = Patterns.TEMPLATE_ARGUMENT.matcher(m1.group());
+        for (String l : lines) {
 
-            if (m2.find()) {
-                result.append(m2.group().replace("<<", "").replace(">>", ""));
+            boolean insideString = false;
+            boolean insideChar = false;
+            boolean insideEscape = false;
+
+            for (int i = 0; i < l.length(); i++) {
+
+                char ch = l.charAt(i);
+
+                if (ch == '\\') {
+                    insideEscape = !insideEscape;
+                }
+                
+                // find double quotes (handles encapsulated quotes correctly)
+                if (ch == '\"' && !(insideEscape || insideChar)) {
+                    insideString = !insideString;
+                }
+
+                // find quotes (handles encapsulated quotes correctly)
+                if (ch == '\'' && !(insideEscape || insideString)) {
+                    insideChar = !insideChar;
+                }
+
+                // we print the character if we are not inside escape or inside char
+                if (!insideChar && (ch != '\'' || insideString || insideEscape)) {
+                    result.append(ch);
+                }
+
+                // current char is no \ (backslash).
+                // thus, we are defenitely not "inside escape"
+                if (ch != '\\') {
+                    insideEscape = false;
+                }
             }
+
+            if (!insideString) {
+                result.append('\n');
+            }
+
         }
 
         return result.toString();
     }
 
+    @Override
     public String getID() {
         return id;
     }
-
 }

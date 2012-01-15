@@ -27,6 +27,7 @@
  */
 package eu.mihosoft.g4j.lang;
 
+
 /**
  *
  * @author Michael Hoffer <info@michaelhoffer.de>
@@ -35,9 +36,10 @@ public class FilterComments implements StringProcessor {
 
     private static final String id = "FilterComments";
 
+    @Override
     public String process(String code) {
-
-        String result = "";
+        
+        StringBuilder result = new StringBuilder();
 
         String[] lines = code.split("\n");
 
@@ -88,32 +90,33 @@ public class FilterComments implements StringProcessor {
                 // if we are not inside of a comment, we write characters
                 if (!insideComment) {
                     // we did read ahead last time to check whether we are
-                    // inside of a comment. as we were not, we wriote the
+                    // inside of a comment. as we were not, we write the
                     // last char now.
                     if (lastChar == '/' && !multiLineCommentStop) {
-                        result += lastChar;
+                        result.append(lastChar);
                     }
                     // if the current character is a '/' we do not write this
                     // character as we do not know if this is the beginning of
                     // a comment
                     if (ch != '/') {
                         multiLineCommentStop = false;
-                        result += ch;
+                        result.append(ch);
                     }
                 }
 
                 lastChar = ch;
             }
 
-            if (!insideComment) {
-                result += "\n";
+            if (!insideComment && lastChar!='/') {
+                result.append('\n');
             }
 
-        }
+        } // end for lines
 
-        return result;
+        return result.toString();
     }
 
+    @Override
     public String getID() {
         return id;
     }
