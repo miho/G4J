@@ -31,6 +31,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -51,7 +52,7 @@ public class Main {
 
 
         TemplateClassProcessor tP = new TemplateClassProcessor();
-        String result = tP.process(code);
+        tP.process(code);
 
 
         System.out.println("Template Classes:");
@@ -66,16 +67,45 @@ public class Main {
             System.out.println(tC);
         }
 
-        System.out.println("Implementations:");
+//        System.out.println("Implementations:");
+//
+//
+//        for (TemplateClass tC : tP.getTemplateClasses()) {
+//            
+//            System.out.println("Code: " + tC);
+//
+//            ClassCodeExtractor cE = new ClassCodeExtractor(tC);
+//            
+//            System.out.println(cE.process(code));
+//        }
+
+        System.out.println("Template Instance Implementations:");
 
 
         for (TemplateClass tC : tP.getTemplateClasses()) {
-            
-            System.out.println("Code: " + tC);
 
-            ClassCodeExtractor cE = new ClassCodeExtractor(tC);
+            Collection<TemplateClass> instances =
+                    new ArrayList<TemplateClass>();
+
+            for (TemplateClass t : tP.getTemplateInstances()) {
+                if (tC.getName().equals(t.getName())) {
+                    instances.add(t);
+                }
+            }
             
-            System.out.println(cE.process(code));
+            ClassCodeExtractor cE = new ClassCodeExtractor(tC);
+            String templateClassCode = cE.process(code);
+
+            for (TemplateClass tI : instances) {
+                System.out.println("Code: " + tI);
+                
+                TemplateInstanceCodeCreator tIC = 
+                        new TemplateInstanceCodeCreator(tC,tI);
+
+                System.out.println(tIC.process(templateClassCode));
+            }
+
+
         }
 
 
