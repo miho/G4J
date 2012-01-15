@@ -36,7 +36,8 @@ import java.util.regex.Pattern;
 public class Patterns {
 
     /**
-     * Regular expression for a valid identifier (variable, class or method names).
+     * Regular expression for a valid identifier (variable, class or method
+     * names).
      */
     public static final String IDENTIFIER_STRING = "[a-zA-Z$_][a-zA-Z$_0-9]*";
     /**
@@ -51,12 +52,10 @@ public class Patterns {
      */
     public static final String TEMPLATE_ARGUMENT_STRING =
             "<<\\s*" + IDENTIFIER_LIST_STRING + "\\s*>>";
-
     /**
-     * <p>Regular expression to match block-comments.</p>
-     * <p><b>Note:</b>  does also match block-comments inside strings! Thus,
-     * to work correctly strings have to be removed before using this
-     * expression.</p>
+     * <p>Regular expression to match block-comments.</p> <p><b>Note:</b> does
+     * also match block-comments inside strings! Thus, to work correctly strings
+     * have to be removed before using this expression.</p>
      */
     public static final String BLOCK_COMMENT_STRING =
             "/\\*(?:.|[\\n\\r])*?\\*/";
@@ -71,8 +70,18 @@ public class Patterns {
             + "private\\s+)(static\\s+|abstract\\s+|final\\s+|)class\\s+"
             + IDENTIFIER_STRING
             + "\\s*" + TEMPLATE_ARGUMENT_STRING
-            + "(\\s*extends\\s+" + IDENTIFIER_STRING+")*"
-            + "(\\s+implements\\s+" + IDENTIFIER_LIST_STRING+")*",
+            + "(\\s*extends\\s+" + IDENTIFIER_STRING + ")*"
+            + "(\\s+implements\\s+" + IDENTIFIER_LIST_STRING + ")*",
+            Pattern.MULTILINE);
+    /**
+     * Pattern to match template class. Example:
+     * <code>
+     * Sample01 &lt;&lt;Type, Type2&gt;&gt;
+     * </code>
+     */
+    public static final Pattern TEMPLATE_CLS = Pattern.compile(
+            "(class\\s+"+IDENTIFIER_STRING +"|" +IDENTIFIER_STRING
+            + ")\\s*" + TEMPLATE_ARGUMENT_STRING,
             Pattern.MULTILINE);
     /**
      * Pattern to match template arguments, e.g.,
@@ -87,50 +96,44 @@ public class Patterns {
      * Pattern to match an identifier list.
      */
     public static final Pattern IDENTIFIER_LIST = Pattern.compile(IDENTIFIER_LIST_STRING);
-    
     /**
-     * <p>Regular expression to match package names.</p>
-     * (default package, i.e., empty string is NOT supported)
+     * <p>Regular expression to match package names.</p> (default package, i.e.,
+     * empty string is NOT supported)
      */
     public static final String PACKAGE_NAME_STRING =
             "(" + IDENTIFIER_STRING + ")" + "(\\." + IDENTIFIER_STRING + ")*";
-    
     /**
-     * Pattern to match package name 
-     * (default package, i.e., empty string is NOT supported)
+     * Pattern to match package name (default package, i.e., empty string is NOT
+     * supported)
      */
     public static final Pattern PACKAGE_NAME =
             Pattern.compile(PACKAGE_NAME_STRING,
             Pattern.DOTALL);
-    
     /**
      * Regular expression to match import definition.
      */
 //    // \\b is stands for word boundary
     public static final String IMPORT_DEFINITION_STRING =
             "\\bimport\\b\\s+" + Patterns.PACKAGE_NAME_STRING
-            +"\\s*(;|\\.\\*\\s*;)";
+            + "\\s*(;|\\.\\*\\s*;)";
     /**
      * Pattern to match import definition.
      */
     public static final Pattern IMPORT_DEFINITION =
             Pattern.compile(IMPORT_DEFINITION_STRING,
             Pattern.DOTALL);
-    
     /**
      * Regular expression to match class definition (without class name).
      */
     public static final String CLASS_DEFINITION_WITHOUT_IDENTIFIER_STRING =
             "(\\s+|^|(\\s+|^)public\\s+|(\\s+|^)protected\\s+|(\\s+|^)"
             + "private\\s+)(static\\s+|abstract\\s+|final\\s+|)class\\s+";
-    
     /**
      * Regular expression to match class definition.
      */
     public static final String CLASS_DEFINITION_STRING =
             CLASS_DEFINITION_WITHOUT_IDENTIFIER_STRING
             + IDENTIFIER_STRING;
-    
     /**
      * Pattern to match class definition. Example:
      * <code>
@@ -139,5 +142,4 @@ public class Patterns {
      */
     public static final Pattern CLASS_DEFINITION =
             Pattern.compile(CLASS_DEFINITION_STRING);
-    
 }

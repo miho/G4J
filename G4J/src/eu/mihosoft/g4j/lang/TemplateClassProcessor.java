@@ -38,8 +38,10 @@ import java.util.regex.Matcher;
 public class TemplateClassProcessor implements StringProcessor {
 
     private static final String id = "Processor:templates";
-    
-    private Collection<TemplateClass> classes = new ArrayList<TemplateClass>();
+    private Collection<TemplateClass> templateClasses =
+            new ArrayList<TemplateClass>();
+    private Collection<TemplateClass> templateInstances =
+            new ArrayList<TemplateClass>();
 
     private String replaceTemplateArguments(String args) {
         String[] templateArgs = args.split(",");
@@ -57,9 +59,10 @@ public class TemplateClassProcessor implements StringProcessor {
     }
 
     public String process(String code) {
-        
-        classes = new ArrayList<TemplateClass>();
-        
+
+        templateClasses = new ArrayList<TemplateClass>();
+        templateInstances = new ArrayList<TemplateClass>();
+
         String originalCode = code;
 
         // filter comments, chars and strings
@@ -71,13 +74,15 @@ public class TemplateClassProcessor implements StringProcessor {
         code = fS.process(code);
 
         StringBuilder result = new StringBuilder();
+        
+        TemplateArgumentsExtractor tAE = new TemplateArgumentsExtractor();
 
         Matcher m = Patterns.TEMPLATE_CLS_HEADER.matcher(code);
 
         while (m.find()) {
 
             String templateClsHeader = m.group();
-            TemplateArgumentsExtractor tAE = new TemplateArgumentsExtractor();
+            
 
             String templateArguments = tAE.process(templateClsHeader);
 
@@ -90,9 +95,28 @@ public class TemplateClassProcessor implements StringProcessor {
                     templateClsHeader, newTemplateClsHeader);
 
             result.append(templateClsHeader).append("\n");
-            
-            getClasses().add(new TemplateClass(
+
+            getTemplateClasses().add(new TemplateClass(
                     LangUtils.classNameFromTemplateClsHeader(templateClsHeader),
+                    templateArguments, code));
+        }
+
+        Matcher m2 = Patterns.TEMPLATE_CLS.matcher(code);
+
+        while (m2.find()) {
+            
+            String templateInstance = m2.group();
+            
+            if (templateInstance.contains("class ")) {
+                continue;
+            }
+            
+            System.out.println(templateInstance);
+            
+            String templateArguments = tAE.process(templateInstance);
+            
+            getTemplateInstances().add(
+                    new TemplateClass(templateInstance.replaceAll("<<.*>>",""),
                     templateArguments, code));
         }
 
@@ -106,7 +130,14 @@ public class TemplateClassProcessor implements StringProcessor {
     /**
      * @return the classes
      */
-    public Collection<TemplateClass> getClasses() {
-        return classes;
+    public Collection<TemplateClass> getTemplateClasses() {
+        return templateClasses;
+    }
+
+    /**
+     * @return the templateInstances
+     */
+    public Collection<TemplateClass> getTemplateInstances() {
+        return templateInstances;
     }
 }

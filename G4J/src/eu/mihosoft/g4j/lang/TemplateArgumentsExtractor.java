@@ -25,7 +25,6 @@
  * authors and should not be interpreted as representing official policies, either expressed
  * or implied, of Michael Hoffer <info@michaelhoffer.de>.
  */
-
 package eu.mihosoft.g4j.lang;
 
 import java.util.regex.Matcher;
@@ -34,7 +33,8 @@ import java.util.regex.Matcher;
  *
  * @author Michael Hoffer <info@michaelhoffer.de>
  */
-public class TemplateArgumentsExtractor implements StringProcessor{
+public class TemplateArgumentsExtractor implements StringProcessor {
+
     private static final String id = "TemplateArgumentExtractor";
 
     public String process(String code) {
@@ -48,6 +48,16 @@ public class TemplateArgumentsExtractor implements StringProcessor{
             if (m2.find()) {
                 result.append(m2.group().replace("<<", "").replace(">>", ""));
             }
+        } else {
+            m1 = Patterns.TEMPLATE_CLS.matcher(code);
+
+            if (m1.find()) {
+                Matcher m2 = Patterns.TEMPLATE_ARGUMENT.matcher(m1.group());
+
+                if (m2.find()) {
+                    result.append(m2.group().replace("<<", "").replace(">>", ""));
+                }
+            }
         }
 
         return result.toString();
@@ -56,5 +66,4 @@ public class TemplateArgumentsExtractor implements StringProcessor{
     public String getID() {
         return id;
     }
-
 }

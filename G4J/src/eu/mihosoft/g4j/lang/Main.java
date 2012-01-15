@@ -55,9 +55,15 @@ public class Main {
         String result = tP.process(code);
       
         
+        System.out.println("Template Classes:");
         
+        for (TemplateClass tC : tP.getTemplateClasses()) {
+            System.out.println(tC);
+        }
         
-        for (TemplateClass tC : tP.getClasses()) {
+        System.out.println("Template Instances:");
+        
+        for (TemplateClass tC : tP.getTemplateInstances()) {
             System.out.println(tC);
         }
 
