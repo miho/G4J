@@ -65,7 +65,6 @@ public class TemplateClassProcessor implements StringProcessor {
     public String process(String code) {
 
 
-
         String originalCode = code;
 
         // filter comments, chars and strings
