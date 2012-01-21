@@ -26,7 +26,7 @@
  * or implied, of Michael Hoffer <info@michaelhoffer.de>.
  */
 
-public class MathSample01 <<T>> extends Base <<T>> {
+public class MathSample01 <<T>> extends Base <<T>>, MathBaseClass<<T>> {
 
     class SubClass<<T>> {
         public T mult(T a, T b) {
@@ -36,5 +36,11 @@ public class MathSample01 <<T>> extends Base <<T>> {
    
     public T add(T a, T b) {
       return a+b;
+    }
+}
+
+class MathBaseClass<<T>> {
+    public T mult(T a, T b) {
+        return a*b;
     }
 }

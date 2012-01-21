@@ -26,10 +26,35 @@
  * or implied, of Michael Hoffer <info@michaelhoffer.de>.
  */
 
-public class Base <<T>> {
+public class Base <<T>> implements A<<T>>{
 
     public Class<?> getType() {
         return T.class;
     }
 }
 
+
+public class A <<T>> extends B<<T>>{
+
+    public Class<?> getType() {
+        return T.class;
+    }
+}
+
+public class B <<T>> extends C<<T,int>>{
+
+    public Class<?> getType() {
+        return T.class;
+    }
+}
+
+public class C <<T,V>> {
+
+    public Class<?> getType() {
+        return T.class;
+    }
+
+    public Class<?> getType2() {
+        return V.class;
+    }
+}
