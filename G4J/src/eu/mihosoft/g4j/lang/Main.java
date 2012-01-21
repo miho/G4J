@@ -50,73 +50,79 @@ public class Main {
         String code = IOUtils.readSampleCode("/eu/mihosoft/g4j/lang/samples/MathSample01.g4j");
         code += "\n" + IOUtils.readSampleCode("/eu/mihosoft/g4j/lang/samples/Main.g4j");
         code += "\n" + IOUtils.readSampleCode("/eu/mihosoft/g4j/lang/samples/Base.g4j");
-        
-        ArrayList<TemplateClass> templateClasses = new ArrayList<TemplateClass>();
-        ArrayList<TemplateClass> templateInstances = new ArrayList<TemplateClass>();
+
+         ArrayList<TemplateClass> templateClasses = new ArrayList<TemplateClass>();
+            ArrayList<TemplateClass> templateInstances = new ArrayList<TemplateClass>();
 
 
-        TemplateClassProcessor tP = 
-                new TemplateClassProcessor(templateClasses, templateInstances);
-        tP.process(code);
-
-        System.out.println("Template Classes:");
-
-        for (TemplateClass tC : tP.getTemplateClasses()) {
-            System.out.println(tC);
-        }
-
-        System.out.println("Template Instances:");
-
-        for (TemplateClass tC : tP.getTemplateInstances()) {
-            System.out.println(tC);
-        }
-
-//        System.out.println("Implementations:");
-//
-//
-//        for (TemplateClass tC : tP.getTemplateClasses()) {
-//            
-//            System.out.println("Code: " + tC);
-//
-//            ClassCodeExtractor cE = new ClassCodeExtractor(tC);
-//            
-//            System.out.println(cE.process(code));
-//        }
-
-        System.out.println("Template Instance Implementations:");
+            TemplateClassProcessor tP =
+                    new TemplateClassProcessor(templateClasses, templateInstances);
+            tP.process(code);
 
         String finalCode = "// processed code\n\n";
 
+        int oldLength = 0;
+        
+        int counter = 0;
 
-        for (TemplateClass tC : tP.getTemplateClasses()) {
+        while (finalCode.length() > oldLength) {
+            
+            System.out.println("\n >> --- G4J Pass " + counter + " ---\n");
+            oldLength = finalCode.length();
 
-            Collection<TemplateClass> instances =
-                    new ArrayList<TemplateClass>();
+            finalCode = "// processed code\n" + "// --> passes: " + counter + "\n\n";
+            
+            counter++;
 
-            for (TemplateClass t : tP.getTemplateInstances()) {
-                if (tC.getName().equals(t.getName())) {
-                    instances.add(t);
+            System.out.println("Template Classes:");
+
+            for (TemplateClass tC : tP.getTemplateClasses()) {
+                System.out.println(tC);
+            }
+
+            System.out.println("Template Instances:");
+
+            for (TemplateClass tC : tP.getTemplateInstances()) {
+                System.out.println(tC);
+            }
+
+            for (TemplateClass tC : tP.getTemplateClasses()) {
+                
+//                System.out.println(">> tC : " + tC);
+
+                Collection<TemplateClass> instances =
+                        new ArrayList<TemplateClass>();
+
+                for (TemplateClass t : tP.getTemplateInstances()) {
+//                    System.out.println(" --> search: " + t);
+                    if (tC.getName().equals(t.getName())) {
+                        instances.add(t);
+                    }
+                }
+
+                ClassCodeExtractor cE = new ClassCodeExtractor(tC);
+                String templateClassCode = cE.process(code);
+
+                for (TemplateClass tI : instances) {
+                    
+//                    System.out.println(" --> tI: " + tI);
+                    
+//                    System.out.println("Code: " + tI);
+
+                    TemplateInstanceCodeCreator tIC =
+                            new TemplateInstanceCodeCreator(tC, tI,
+                            templateClasses, templateInstances);
+
+//                    System.out.println(tIC.process(templateClassCode));
+
+                    finalCode += tIC.process(templateClassCode);
                 }
             }
-
-            ClassCodeExtractor cE = new ClassCodeExtractor(tC);
-            String templateClassCode = cE.process(code);
-
-            for (TemplateClass tI : instances) {
-                System.out.println("Code: " + tI);
-
-                TemplateInstanceCodeCreator tIC =
-                        new TemplateInstanceCodeCreator(tC, tI,
-                        templateClasses, templateInstances);
-
-                System.out.println(tIC.process(templateClassCode));
-
-                finalCode += tIC.process(templateClassCode);
-            }
+            
+            tP.process(finalCode);
         }
 
-        System.out.println("Final Code:\n\n" + finalCode);
-
+        System.out.println("\nFinal Code:\n\n" + finalCode);
 
 //        CodeAnalyzerImpl analyzer = new CodeAnalyzerImpl();
 //

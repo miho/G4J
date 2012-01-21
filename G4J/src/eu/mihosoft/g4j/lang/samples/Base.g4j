@@ -32,3 +32,4 @@ public class Base <<T>> {
         return T.class;
     }
 }
+

@@ -120,10 +120,11 @@ public class TemplateClassProcessor implements StringProcessor {
             String templateArguments = tAE.process(templateInstance);
 
             TemplateClass tI = new TemplateClass(
-                    templateInstance.replaceAll("<<.*>>", ""),
+                    templateInstance.replaceAll("<<.*>>", "").trim(),
                     templateArguments, code);
 
-            if (!getTemplateInstances().contains(tI)) {
+            if (!getTemplateInstances().contains(tI) 
+                    && !getTemplateClasses().contains(tI)) {
                 getTemplateInstances().add(tI);
             }
         }
