@@ -26,20 +26,23 @@
  * or implied, of Michael Hoffer <info@michaelhoffer.de>.
  */
 
-public class Main {
+public class Main <<T>> {
+
+    public static final Main<<int>> main = new Main<<int>>();
    
     public static void main(String[] args) {
 
-      MathSample01<<double>> math = new MathSample01<double>>();
+      MathSample01<<double>> math = new MathSample01<<double>>();
 
       double result = math.add(0.1,1.9);
 
       System.out.println("Result(double): " + result);
 
-      MathSample01<<int>> math2 = new MathSample01<int>>();
+      MathSample01<<int>> math2 = new MathSample01<<int>>();
 
       int result2 = math2.add(1,1);
 
       System.out.println("Result(int): " + result2);
+
     }
 }
