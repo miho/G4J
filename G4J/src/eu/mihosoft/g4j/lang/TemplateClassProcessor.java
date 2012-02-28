@@ -47,7 +47,7 @@ public class TemplateClassProcessor implements StringProcessor {
         this.templateInstances = templateInstances;
     }
 
-    private String replaceTemplateArguments(String args) {
+    public static String replaceTemplateArguments(String args) {
         String[] templateArgs = args.split(",");
 
         StringBuilder result = new StringBuilder();

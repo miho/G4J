@@ -27,14 +27,9 @@
  */
 package eu.mihosoft.g4j.lang;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.regex.Matcher;
 
 /**
  *
@@ -51,27 +46,30 @@ public class Main {
         code += "\n" + IOUtils.readSampleCode("/eu/mihosoft/g4j/lang/samples/Main.g4j");
         code += "\n" + IOUtils.readSampleCode("/eu/mihosoft/g4j/lang/samples/Base.g4j");
 
-         ArrayList<TemplateClass> templateClasses = new ArrayList<TemplateClass>();
-            ArrayList<TemplateClass> templateInstances = new ArrayList<TemplateClass>();
+        ArrayList<TemplateClass> templateClasses = new ArrayList<TemplateClass>();
+        ArrayList<TemplateClass> templateInstances = new ArrayList<TemplateClass>();
 
 
-            TemplateClassProcessor tP =
-                    new TemplateClassProcessor(templateClasses, templateInstances);
-            tP.process(code);
+        TemplateClassProcessor tP =
+                new TemplateClassProcessor(templateClasses, templateInstances);
+
+        tP.process(code);
+//        
+//        System.out.println("----------CODE:-----------");
+//        System.out.println(processed);
 
         String finalCode = "// processed code\n\n";
 
         int oldLength = 0;
-        
         int counter = 0;
 
         while (finalCode.length() > oldLength) {
-            
+
             System.out.println("\n >> --- G4J Pass " + counter + " ---\n");
             oldLength = finalCode.length();
 
             finalCode = "// processed code\n" + "// --> passes: " + counter + "\n\n";
-            
+
             counter++;
 
             System.out.println("Template Classes:");
@@ -87,7 +85,7 @@ public class Main {
             }
 
             for (TemplateClass tC : tP.getTemplateClasses()) {
-                
+
 //                System.out.println(">> tC : " + tC);
 
                 Collection<TemplateClass> instances =
@@ -104,9 +102,9 @@ public class Main {
                 String templateClassCode = cE.process(code);
 
                 for (TemplateClass tI : instances) {
-                    
+
 //                    System.out.println(" --> tI: " + tI);
-                    
+
 //                    System.out.println("Code: " + tI);
 
                     TemplateInstanceCodeCreator tIC =
@@ -118,25 +116,38 @@ public class Main {
                     finalCode += tIC.process(templateClassCode);
                 }
             }
-            
+
             tP.process(finalCode);
         }
 
+
+        // finally convert <<T>,V> to T_V notation
+
+        Matcher m = Patterns.TEMPLATE_ARGUMENT.matcher(finalCode);
+
+        while (m.find()) {
+
+            String templateArgs = m.group();
+
+            int start = m.start();
+            int end = m.end();
+            
+            templateArgs = templateArgs.
+                    replaceFirst("<<", "").
+                    replaceFirst(">>", "").trim();
+
+            String codeBefore = finalCode.substring(0, start);
+            String replacement = TemplateClassProcessor.
+                    replaceTemplateArguments(templateArgs);
+            String codeAfter = finalCode.substring(end);
+
+            finalCode = codeBefore + replacement + codeAfter;
+
+            m = Patterns.TEMPLATE_ARGUMENT.matcher(finalCode);
+        }
+
+
         System.out.println("\nFinal Code:\n\n" + finalCode);
-
-//        CodeAnalyzerImpl analyzer = new CodeAnalyzerImpl();
-//
-//        FilterComments rC = new FilterComments();
-//        code = rC.process(code);
-//
-//        Collection<ClassEntry> classes = analyzer.analyze(new CodeEntry(code));
-//
-//        for (ClassEntry cE : classes) {
-//            System.out.println("Class (" + cE.getName() + "): \n" + cE.getCode());
-//        }
-
-
-
 
     }
 }
