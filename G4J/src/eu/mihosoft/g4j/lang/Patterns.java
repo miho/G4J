@@ -1,30 +1,55 @@
-/*
- * Copyright 2011 Michael Hoffer <info@michaelhoffer.de>. All rights reserved.
+/* 
+ * Patterns.java
+ * 
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Redistribution and use in source and binary forms, with or without modification, are
- * permitted provided that the following conditions are met:
+ * Copyright (c) 2009–2012 Steinbeis Forschungszentrum (STZ Ölbronn),
+ * Copyright (c) 2006–2012 by Michael Hoffer
+ * 
+ * This file is part of Visual Reflection Library (VRL).
  *
- *    1. Redistributions of source code must retain the above copyright notice, this list of
- *       conditions and the following disclaimer.
+ * VRL is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * as published by the Free Software Foundation.
+ * 
+ * see: http://opensource.org/licenses/LGPL-3.0
+ *      file://path/to/VRL/src/eu/mihosoft/vrl/resources/license/lgplv3.txt
  *
- *    2. Redistributions in binary form must reproduce the above copyright notice, this list
- *       of conditions and the following disclaimer in the documentation and/or other materials
- *       provided with the distribution.
+ * VRL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- * THIS SOFTWARE IS PROVIDED BY Michael Hoffer <info@michaelhoffer.de> "AS IS" AND ANY EXPRESS OR IMPLIED
- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
- * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL Michael Hoffer <info@michaelhoffer.de> OR
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
- * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * This version of VRL includes copyright notice and attribution requirements.
+ * According to the LGPL this information must be displayed even if you modify
+ * the source code of VRL. Neither the VRL Canvas attribution icon nor any
+ * copyright statement/attribution may be removed.
  *
- * The views and conclusions contained in the software and documentation are those of the
- * authors and should not be interpreted as representing official policies, either expressed
- * or implied, of Michael Hoffer <info@michaelhoffer.de>.
+ * Attribution Requirements:
+ *
+ * If you create derived work you must do three things regarding copyright
+ * notice and author attribution.
+ *
+ * First, the following text must be displayed on the Canvas:
+ * "based on VRL source code". In this case the VRL canvas icon must be removed.
+ * 
+ * Second, the copyright notice must remain. It must be reproduced in any
+ * program that uses VRL.
+ *
+ * Third, add an additional notice, stating that you modified VRL. In addition
+ * you must cite the publications listed below. A suitable notice might read
+ * "VRL source code modified by YourName 2012".
+ * 
+ * Note, that these requirements are in full accordance with the LGPL v3
+ * (see 7. Additional Terms, b).
+ *
+ * Publications:
+ *
+ * M. Hoffer, C.Poliwoda, G.Wittum. Visual Reflection Library -
+ * A Framework for Declarative GUI Programming on the Java Platform.
+ * Computing and Visualization in Science, 2011, in press.
  */
+
 package eu.mihosoft.g4j.lang;
 
 import java.util.regex.Pattern;
@@ -60,27 +85,27 @@ public class Patterns {
     public static final String BLOCK_COMMENT_STRING =
             "/\\*(?:.|[\\n\\r])*?\\*/";
     /**
-     * Pattern to match template class headers. Example:
+     * Pattern to match template class or interface headers. Example:
      * <code>
      * public class Sample01 &lt;&lt;Type, Type2&gt;&gt; extends Base01
      * </code>
      */
     public static final Pattern TEMPLATE_CLS_HEADER = Pattern.compile(
             "(\\s+|^|(\\s+|^)public\\s+|(\\s+|^)protected\\s+|(\\s+|^)"
-            + "private\\s+)(static\\s+|abstract\\s+|final\\s+|)class\\s+"
+            + "private\\s+)(static\\s+|abstract\\s+|final\\s+|)(class\\s+|interface\\s+)"
             + IDENTIFIER_STRING
             + "\\s*" + TEMPLATE_ARGUMENT_STRING
             + "(\\s*extends\\s+" + IDENTIFIER_STRING + ")*"
             + "(\\s+implements\\s+" + IDENTIFIER_LIST_STRING + ")*",
             Pattern.MULTILINE);
     /**
-     * Pattern to match template class. Example:
+     * Pattern to match template class or interface. Example:
      * <code>
      * Sample01 &lt;&lt;Type, Type2&gt;&gt;
      * </code>
      */
     public static final Pattern TEMPLATE_CLS = Pattern.compile(
-            "(class\\s+"+IDENTIFIER_STRING +"|" +IDENTIFIER_STRING
+            "((class\\s+|interface\\s+)"+IDENTIFIER_STRING +"|" +IDENTIFIER_STRING
             + ")\\s*" + TEMPLATE_ARGUMENT_STRING,
             Pattern.MULTILINE);
     /**
@@ -123,11 +148,11 @@ public class Patterns {
             Pattern.compile(IMPORT_DEFINITION_STRING,
             Pattern.DOTALL);
     /**
-     * Regular expression to match class definition (without class name).
+     * Regular expression to match class or interface definition (without class name).
      */
     public static final String CLASS_DEFINITION_WITHOUT_IDENTIFIER_STRING =
             "(\\s+|^|(\\s+|^)public\\s+|(\\s+|^)protected\\s+|(\\s+|^)"
-            + "private\\s+)(static\\s+|abstract\\s+|final\\s+|)class\\s+";
+            + "private\\s+)(static\\s+|abstract\\s+|final\\s+|)(class\\s+|interface\\s+)";
     /**
      * Regular expression to match class definition.
      */

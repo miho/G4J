@@ -26,7 +26,7 @@
  * or implied, of Michael Hoffer <info@michaelhoffer.de>.
  */
 
-public class Base <<T>> implements A<<T>>{
+public class Base <<T>> implements A<<T>>, IA<<T,int>>{
 
     public Class<?> getType() {
         return T.class;
@@ -57,4 +57,9 @@ public class C <<T,V>> {
     public Class<?> getType2() {
         return V.class;
     }
+}
+
+interface IA <<T,V>> {
+    T t;
+    V v;
 }
