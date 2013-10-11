@@ -6,20 +6,12 @@
 package eu.mihosoft.g4j.lang;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
-import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,7 +31,7 @@ public class G4JUtil {
     public static boolean processFile(
             Path srcFile,
             Path destFile,
-            String packageNanme) throws IOException {
+            String packageName) throws IOException {
 
         String code = new String(Files.readAllBytes(srcFile), "UTF-8");
 
@@ -75,6 +67,16 @@ public class G4JUtil {
         G4J g4j = new G4J();
         code = g4j.process(code);
         
+        code = "package " + packageName + ";\n\n" + code;
+
+        if (!Files.exists(outputFile.getParent())) {
+            try {
+                Files.createDirectories(outputFile.getParent());
+            } catch (IOException ex) {
+                Logger.getLogger(G4JUtil.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
         try {
             Files.write(outputFile, code.getBytes("UTF-8"));
         } catch (UnsupportedEncodingException ex) {
