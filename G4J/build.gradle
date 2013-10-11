@@ -1,0 +1,60 @@
+//apply from: 'http://dl.bintray.com/content/shemnon/javafx-gradle/javafx.plugin'
+
+//apply from: 'http://gradle-plugins.mihosoft.eu/latest/vlicenseheader.gradle'
+//repairHeaders.licenseHeaderText = new File(projectDir,'../license-template.txt')
+apply plugin: 'idea'
+
+apply plugin: 'java'
+
+apply from: 'version-info.gradle'
+apply from: 'jdkdetect.gradle'
+
+//apply from: 'maven-deployment.gradle'
+apply from: 'maven-deployment-local.gradle'
+
+// repositories {
+//     
+//     //mavenLocal()
+//     
+//     mavenCentral()
+//     maven {
+//         url "https://oss.sonatype.org/content/repositories/snapshots"
+//     }
+// }
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.8'
+}
+
+dependencies {
+
+}
+
+tasks.withType(Compile) {
+    options.encoding = 'UTF-8'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/']
+        }
+        
+        resources {
+            srcDirs = ['src/']
+        }
+    }
+
+    test {
+        java {
+            srcDirs = ['test/']
+        }
+    }
+}
+
+//compileJava {
+//    options.fork=true
+//    options.compilerArgs+="-Xlint:unchecked"
+//}
+
+mainClass = "eu.mihosoft.g4j.lang.Main"
