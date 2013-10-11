@@ -1,0 +1,9 @@
+apply from: 'jdkdetect.gradle'
+apply plugin: 'maven'
+
+// maven deployment properties
+
+group = 'eu.mihosoft.g4j.gradle'
+
+version = '0.1-r1-SNAPSHOT'
+

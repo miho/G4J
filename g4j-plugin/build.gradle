@@ -1,0 +1,24 @@
+apply plugin: 'groovy'
+apply plugin: 'maven'
+//apply from: 'maven-deployment.gradle'
+apply from: 'maven-deployment-local.gradle'
+
+repositories {
+    mavenCentral()
+    
+    mavenLocal()
+    
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots"
+    }
+}
+
+dependencies {
+    compile gradleApi()
+    groovy localGroovy()
+
+    compile "eu.mihosoft.g4j:g4j:0.1-r1-SNAPSHOT"
+}
+
+
+
