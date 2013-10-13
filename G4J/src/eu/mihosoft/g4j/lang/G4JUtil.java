@@ -69,7 +69,9 @@ public class G4JUtil {
         
         code = "package " + packageName + ";\n\n" + code;
 
-        if (!Files.exists(outputFile.getParent())) {
+	Path outputParent = outputFile.getParent(); 
+
+        if (!Files.exists(outputFile.toAbsolutePath().getParent())) {
             try {
                 Files.createDirectories(outputFile.getParent());
             } catch (IOException ex) {
