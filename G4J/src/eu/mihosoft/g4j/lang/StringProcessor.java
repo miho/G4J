@@ -52,6 +52,8 @@
 
 package eu.mihosoft.g4j.lang;
 
+import java.util.List;
+
 /**
  * A string processor.
  * @see {@link FilterComments}, {@link FilterStrings}, {@link FilterChars}

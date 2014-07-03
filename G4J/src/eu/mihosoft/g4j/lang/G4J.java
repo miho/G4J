@@ -54,6 +54,7 @@ package eu.mihosoft.g4j.lang;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.regex.Matcher;
 
 /**
@@ -66,12 +67,35 @@ public class G4J implements StringProcessor, Serializable {
 
     private static final String id = "Processor:g4j";
 
-    @Override
-    public String process(
-            String code) {
+    public List<Code> process(List<Code> codes) {
+        List<TemplateClass> templateClasses = new ArrayList<TemplateClass>();
+        List<TemplateClass> templateInstances = new ArrayList<TemplateClass>();
 
-        ArrayList<TemplateClass> templateClasses = new ArrayList<TemplateClass>();
-        ArrayList<TemplateClass> templateInstances = new ArrayList<TemplateClass>();
+        List<Code> finalCodes = new ArrayList<>();
+
+        for (Code code : codes) {
+            finalCodes.add(
+                    new Code(code.getFileName(),
+                            process(code.getCode(),
+                                    templateClasses,
+                                    templateInstances)));
+        }
+
+        return finalCodes;
+    }
+
+    @Override
+    public String process(String code) {
+
+        List<TemplateClass> templateClasses = new ArrayList<TemplateClass>();
+        List<TemplateClass> templateInstances = new ArrayList<TemplateClass>();
+
+        return process(code, templateClasses, templateInstances);
+    }
+
+    private String process(String code,
+            List<TemplateClass> templateClasses,
+            List<TemplateClass> templateInstances) {
 
         TemplateClassProcessor tP
                 = new TemplateClassProcessor(templateClasses, templateInstances);
@@ -118,12 +142,12 @@ public class G4J implements StringProcessor, Serializable {
                 }
 
                 ClassCodeExtractor cE = new ClassCodeExtractor(tC);
+
                 String templateClassCode = cE.process(code);
 
                 for (TemplateClass tI : instances) {
-                    
-//                     System.out.println("Code: " + tI.getClsHeader());
 
+//                     System.out.println("Code: " + tI.getClsHeader());
 //                    System.out.println(" --> tI: " + tI);
 //                    System.out.println("Code: " + tI.getClsHeader());
                     TemplateInstanceCodeCreator tIC

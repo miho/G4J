@@ -12,6 +12,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -62,7 +64,7 @@ public class G4JUtil {
                     log(Level.SEVERE, null, ex);
         }
 
-        String code = g4jVisitor.getFinalCode();
+        String code = g4jVisitor.getMergedCode();
 
         G4J g4j = new G4J();
         code = g4j.process(code);
@@ -105,8 +107,8 @@ public class G4JUtil {
  */
 class G4JVisitor extends SimpleFileVisitor<Path> {
 
-    private String packageName;
-    private String finalCode = "";
+    private String mergedCode = "";
+    private final List<Code> codes = new ArrayList<Code>();
 
     public G4JVisitor() {
         //
@@ -118,7 +120,11 @@ class G4JVisitor extends SimpleFileVisitor<Path> {
         if (file.toString().endsWith(".g4j")) {
             System.out.println(" -> processing: " + file.toString());
 
-            finalCode += new String(Files.readAllBytes(file), "UTF-8");
+            String code = new String(Files.readAllBytes(file), "UTF-8");
+            
+            mergedCode += code;
+            
+            codes.add(new Code(file.toString(), code));
         }
 
         return FileVisitResult.CONTINUE;
@@ -127,8 +133,15 @@ class G4JVisitor extends SimpleFileVisitor<Path> {
     /**
      * @return the finalCode
      */
-    public String getFinalCode() {
-        return finalCode;
+    public String getMergedCode() {
+  
+        return mergedCode;
     }
+
+    public List<Code> getCodes() {
+        return codes;
+    }
+    
+    
 
 }
