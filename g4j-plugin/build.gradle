@@ -20,5 +20,7 @@ dependencies {
     compile "eu.mihosoft.g4j:g4j:0.1-r1-SNAPSHOT"
 }
 
-
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.12'
+}
 
