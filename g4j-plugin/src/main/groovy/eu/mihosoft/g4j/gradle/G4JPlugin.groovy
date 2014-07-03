@@ -18,7 +18,8 @@ class G4JPlugin implements Plugin {
                        
                         eu.mihosoft.g4j.lang.G4JUtil.processDir(
                             Paths.get(dir.getAbsolutePath()),
-                            Paths.get(dir.getAbsolutePath()+"/" + project.g4j.g4jPackageName.replace(".","/")+"/g4j_tmp.java"),
+//                            Paths.get(dir.getAbsolutePath()+"/" + project.g4j.g4jPackageName.replace(".","/")+"/g4j_tmp.java"),
+                            Paths.get(dir.getAbsolutePath()+"/" + project.g4j.g4jPackageName.replace(".","/")),
                             project.g4j.g4jPackageName);
                         
                     }
