@@ -61,46 +61,72 @@ import java.util.regex.Matcher;
  *
  * @author Michael Hoffer <info@michaelhoffer.de>
  */
-public class G4J implements StringProcessor, Serializable {
+public class G4J implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private static final String id = "Processor:g4j";
 
+    String globalCode = "";
+
     public List<Code> process(List<Code> codes) {
+
+        globalCode = "";
+
+        for (Code code : codes) {
+            globalCode+="//"+code.getFile().toString() + "\n" + code.getCode()+"\n";
+        }
+
         List<TemplateClass> templateClasses = new ArrayList<TemplateClass>();
         List<TemplateClass> templateInstances = new ArrayList<TemplateClass>();
 
         List<Code> finalCodes = new ArrayList<>();
 
         for (Code code : codes) {
-            finalCodes.add(
-                    new Code(code.getFileName(),
-                            process(code.getCode(),
-                                    templateClasses,
-                                    templateInstances)));
+            System.out.println(" --- processing codefile: " + code.getFile() + " ---");
+            finalCodes.addAll(
+                    process(code,
+                            templateClasses,
+                            templateInstances));
         }
 
         return finalCodes;
     }
 
-    @Override
-    public String process(String code) {
-
-        List<TemplateClass> templateClasses = new ArrayList<TemplateClass>();
-        List<TemplateClass> templateInstances = new ArrayList<TemplateClass>();
-
-        return process(code, templateClasses, templateInstances);
-    }
-
-    private String process(String code,
+//    public String process(String code) {
+//
+//        List<TemplateClass> templateClasses = new ArrayList<TemplateClass>();
+//        List<TemplateClass> templateInstances = new ArrayList<TemplateClass>();
+//
+//        return process(code, templateClasses, templateInstances);
+//    }
+    private List<Code> process(Code codeObj,
             List<TemplateClass> templateClasses,
             List<TemplateClass> templateInstances) {
+
+        List<Code> codes = new ArrayList<Code>();
 
         TemplateClassProcessor tP
                 = new TemplateClassProcessor(templateClasses, templateInstances);
 
+        String code = codeObj.getCode();
+
         tP.process(code);
+
+        // filter template instances, e.g., classes that seem to be
+        // template instances based on the view limited to a single file
+        // but which are template classes that are already defined in other
+        // files
+        List<TemplateClass> instancesBeforeProcess = new ArrayList<TemplateClass>(templateInstances);
+        List<TemplateClass> delList = new ArrayList<TemplateClass>();
+        for (TemplateClass tCls : templateClasses) {
+            for (TemplateClass tInst : instancesBeforeProcess) {
+                if (tInst.getName().equals(tCls.getName())) {
+                    delList.add(tCls);
+                }
+            }
+        }
+        templateInstances.removeAll(delList);
 
         String finalCode = "// processed code\n\n";
 
@@ -155,13 +181,23 @@ public class G4J implements StringProcessor, Serializable {
                                     templateClasses, templateInstances);
 
 //                    System.out.println(tIC.process(templateClassCode));
-                    finalCode += tIC.process(templateClassCode);
+                    
+                    String localCode = tIC.process(templateClassCode);
+                    finalCode += localCode;
+               
+                    codes.add(new Code(codeObj.getFile(), convertTemplateArgs(localCode), tI.getTemplateArguments()));
                 }
             }
 
             tP.process(finalCode);
         }
 
+        convertTemplateArgs(finalCode);
+
+        return codes;
+    }
+
+    private String convertTemplateArgs(String finalCode) {
         // finally convert <<T>,V> to T_V notation
         Matcher m = Patterns.TEMPLATE_ARGUMENT.matcher(finalCode);
 
@@ -185,12 +221,8 @@ public class G4J implements StringProcessor, Serializable {
 
             m = Patterns.TEMPLATE_ARGUMENT.matcher(finalCode);
         }
-
+        
         return finalCode;
     }
 
-    @Override
-    public String getID() {
-        return id;
-    }
 }

@@ -5,26 +5,42 @@
  */
 package eu.mihosoft.g4j.lang;
 
+import java.nio.file.Path;
+
 /**
  *
  * @author Michael Hoffer &lt;info@michaelhoffer.de&gt;
  */
 public class Code {
 
-    private final String fileName;
+    private final Path file;
     private final String code;
+    private final String templateArguments;
 
-    public Code(String fileName, String code) {
-        this.fileName = fileName;
+    public Code(Path file, String code, String templateArguments) {
+        this.file = file;
         this.code = code;
+        this.templateArguments = templateArguments;
+    }
+    
+        public Code(Path file, String code) {
+        this.file = file;
+        this.code = code;
+        this.templateArguments = "";
     }
 
-    public String getFileName() {
-        return fileName;
+    public Path getFile() {
+        return file;
     }
 
     public String getCode() {
         return code;
     }
+
+    public String getTemplateArguments() {
+        return templateArguments;
+    }
+    
+    
 
 }

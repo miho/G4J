@@ -5,6 +5,7 @@
  */
 package eu.mihosoft.g4j.lang;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.FileVisitResult;
@@ -30,29 +31,68 @@ public class G4JUtil {
         throw new AssertionError("Don't instanciate me!");
     }
 
-    public static boolean processFile(
-            Path srcFile,
-            Path destFile,
-            String packageName) throws IOException {
-
-        String code = new String(Files.readAllBytes(srcFile), "UTF-8");
-
-        G4J g4j = new G4J();
-        code = g4j.process(code);
-
-        Files.write(destFile, code.getBytes("UTF-8"));
-
-        return false;
-    }
+//    public static boolean processFile(
+//            Path srcFile,
+//            Path destFile,
+//            String packageName) throws IOException {
+//
+//        String code = new String(Files.readAllBytes(srcFile), "UTF-8");
+//
+//        G4J g4j = new G4J();
+//        code = g4j.process(code);
+//
+//        Files.write(destFile, code.getBytes("UTF-8"));
+//
+//        return false;
+//    }
 
 //    public static void processDir(
 //            Path inputDir,
 //            Path outputDir) {
 //            processDir(inputDir, outputDir);
 //    }
+    
+//    public static void processDirAndMerge(
+//            Path inputDir,
+//            Path outputFile, String packageName) {
+//        areDirs(inputDir);
+//
+//        G4JVisitor g4jVisitor
+//                = new G4JVisitor();
+//        try {
+//            Files.walkFileTree(inputDir, g4jVisitor);
+//        } catch (IOException ex) {
+//            Logger.getLogger(G4JUtil.class.getName()).
+//                    log(Level.SEVERE, null, ex);
+//        }
+//
+//        String code = g4jVisitor.getMergedCode();
+//
+//        G4J g4j = new G4J();
+//        code = g4j.process(code);
+//        
+//        code = "package " + packageName + ";\n\n" + code;
+//
+//        if (!Files.exists(outputFile.toAbsolutePath().getParent())) {
+//            try {
+//                Files.createDirectories(outputFile.getParent());
+//            } catch (IOException ex) {
+//                Logger.getLogger(G4JUtil.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        }
+//
+//        try {
+//            Files.write(outputFile, code.getBytes("UTF-8"));
+//        } catch (UnsupportedEncodingException ex) {
+//            Logger.getLogger(G4JUtil.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (IOException ex) {
+//            Logger.getLogger(G4JUtil.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
+    
     public static void processDir(
             Path inputDir,
-            Path outputFile, String packageName) {
+            Path outputDir, String packageName) {
         areDirs(inputDir);
 
         G4JVisitor g4jVisitor
@@ -64,29 +104,34 @@ public class G4JUtil {
                     log(Level.SEVERE, null, ex);
         }
 
-        String code = g4jVisitor.getMergedCode();
-
         G4J g4j = new G4J();
-        code = g4j.process(code);
+        List<Code> codes = g4j.process(g4jVisitor.getCodes());
         
-        code = "package " + packageName + ";\n\n" + code;
+        for(Code c : codes) {
+        
+            String code = "package " + packageName + ";\n\n" + c.getCode();
 
-	Path outputParent = outputFile.getParent(); 
+            String fName = c.getFile().getFileName().toString();
+            fName = fName.substring(0,fName.length()-4) + "_"+c.getTemplateArguments() + ".java";
+            
+            File outputFile = new File(outputDir.toAbsolutePath().toString(), fName);
 
-        if (!Files.exists(outputFile.toAbsolutePath().getParent())) {
+            if (!Files.exists(outputDir)) {
+                try {
+                    Files.createDirectories(outputDir);
+                } catch (IOException ex) {
+                    Logger.getLogger(G4JUtil.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
             try {
-                Files.createDirectories(outputFile.getParent());
+                Files.write(outputFile.toPath(), code.getBytes("UTF-8"));
+            } catch (UnsupportedEncodingException ex) {
+                Logger.getLogger(G4JUtil.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
                 Logger.getLogger(G4JUtil.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-
-        try {
-            Files.write(outputFile, code.getBytes("UTF-8"));
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(G4JUtil.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(G4JUtil.class.getName()).log(Level.SEVERE, null, ex);
+        
         }
     }
 
@@ -124,7 +169,7 @@ class G4JVisitor extends SimpleFileVisitor<Path> {
             
             mergedCode += code;
             
-            codes.add(new Code(file.toString(), code));
+            codes.add(new Code(file, code));
         }
 
         return FileVisitResult.CONTINUE;
