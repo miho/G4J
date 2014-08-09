@@ -52,6 +52,7 @@
 package eu.mihosoft.g4j.lang;
 
 import java.io.Serializable;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -169,7 +170,20 @@ public class G4J implements Serializable {
 
                 ClassCodeExtractor cE = new ClassCodeExtractor(tC);
 
-                String templateClassCode = cE.process(code);
+//                String templateClassCode = "";
+//                
+//                System.out.println("codes: " + codes.size());
+//                
+//                for(Code tICode : codes) {
+//                    templateClassCode = cE.process(tICode.getCode());
+//                    if (!templateClassCode.isEmpty()) {
+//                        break;
+//                    }
+//                }
+                
+                String templateClassCode = cE.process(globalCode);
+                
+//                if(templateClassCode.isEmpty()) System.out.println("EMPTY: " + tC.getName());;
 
                 for (TemplateClass tI : instances) {
 
@@ -183,9 +197,15 @@ public class G4J implements Serializable {
 //                    System.out.println(tIC.process(templateClassCode));
                     
                     String localCode = tIC.process(templateClassCode);
+              
+                    if (tI.getName().startsWith("Data")) {
+                        System.out.println("Date Code:");
+                        System.out.println(localCode);
+                    }
+   
                     finalCode += localCode;
                
-                    codes.add(new Code(codeObj.getFile(), convertTemplateArgs(localCode), tI.getTemplateArguments()));
+                    codes.add(new Code(Paths.get(codeObj.getFile().getParent()+"/"+tI.getName()+".g4j"), convertTemplateArgs(localCode), tI.getTemplateArguments()));
                 }
             }
 

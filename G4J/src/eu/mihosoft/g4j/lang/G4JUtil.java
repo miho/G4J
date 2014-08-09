@@ -108,6 +108,8 @@ public class G4JUtil {
         List<Code> codes = g4j.process(g4jVisitor.getCodes());
         
         for(Code c : codes) {
+            
+            System.out.println("c: " + c.getFile());
         
             String code = "package " + packageName + ";\n\n" + c.getCode();
 
@@ -115,17 +117,19 @@ public class G4JUtil {
             fName = fName.substring(0,fName.length()-4) + "_"+c.getTemplateArguments() + ".java";
             
             File outputFile = new File(outputDir.toAbsolutePath().toString(), fName);
-
-            if (!Files.exists(outputDir)) {
-                try {
-                    Files.createDirectories(outputDir);
-                } catch (IOException ex) {
-                    Logger.getLogger(G4JUtil.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+//
+//            if (!Files.exists(outputDir)) {
+//                try {
+//                    Files.createDirectories(outputDir);
+//                } catch (IOException ex) {
+//                    Logger.getLogger(G4JUtil.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            }
 
             try {
                 Files.write(outputFile.toPath(), code.getBytes("UTF-8"));
+                
+                System.out.println("written: " + outputFile.toPath());
             } catch (UnsupportedEncodingException ex) {
                 Logger.getLogger(G4JUtil.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {

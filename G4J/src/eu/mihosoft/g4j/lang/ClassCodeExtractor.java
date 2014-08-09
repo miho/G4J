@@ -92,6 +92,8 @@ public class ClassCodeExtractor implements StringProcessor {
                         LangUtils.classNameFromTemplateClsHeader(l).
                         equals(clazz.getName());
             }
+            
+//            System.out.println("l: " + insideOfClassImplementation + " : " +clazz.getName()+ " == " + LangUtils.classNameFromTemplateClsHeader(l) + " : " + l);
 
             if (insideOfClassImplementation) {
                 for (int i = 0; i < l.length(); i++) {
@@ -120,6 +122,7 @@ public class ClassCodeExtractor implements StringProcessor {
         return result.toString();
     }
 
+    @Override
     public String getID() {
         return id;
     }
