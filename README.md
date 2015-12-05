@@ -3,5 +3,5 @@ Efficient Generics for Java (uses a preprocessor to allow generic algorithms tha
 
 **WARNING:** Please use this library with care. It can open Pandora's box ;)
 
-We are waiting for project valhalla...
+We are waiting for project [valhalla](http://openjdk.java.net/projects/valhalla/)...
 
